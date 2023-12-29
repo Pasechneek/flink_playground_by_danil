@@ -1,8 +1,10 @@
 package org.example;
 
 import org.apache.flink.api.common.ExecutionConfig;
+import org.apache.flink.api.common.ExecutionMode;
 import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.shaded.zookeeper3.io.netty.util.internal.logging.Log4J2LoggerFactory;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironmentFactory;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -16,20 +18,22 @@ public class Example {
     public static void main(String[] args) throws Exception {
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         final ExecutionConfig executionConfig = env.getConfig();
+        executionConfig.setMaxParallelism(10);
+        executionConfig.setExecutionMode(ExecutionMode.PIPELINED);
 
 
-//        DataStream<Person> flintstones = env.fromElements(
-//                new Person("Fred", 35),
-//                new Person("Wilma", 35),
-//                new Person("Pebbles", 2));
 
-        List<Person> people = new ArrayList<Person>();
+        DataStream<Person> flintstones = env.fromElements(
+                new Person("Fred", 35),
+                new Person("Wilma", 35),
+                new Person("Pebbles", 2));
 
-        people.add(new Person("Fred", 35));
-        people.add(new Person("Wilma", 35));
-        people.add(new Person("Pebbles", 2));
-
-        DataStream<Person> flintstones = env.fromCollection(people);
+//        List<Person> people = new ArrayList<Person>();
+//
+//        people.add(new Person("Fred", 35));
+//        people.add(new Person("Wilma", 35));
+//        people.add(new Person("Pebbles", 2));
+//        DataStream<Person> flintstones = env.fromCollection(people);
 
         DataStream<Person> adults = flintstones.filter(new FilterFunction<Person>() {
             @Override
@@ -44,13 +48,13 @@ public class Example {
 
 //        StreamExecutionEnvironmentFactory exec_env_factory = new StreamExecutionEnvironmentFactory();
 
-//        final JobClient jobClient = env.executeAsync();
-////
-//        final JobExecutionResult jobExecutionResult = jobClient.getJobExecutionResult().get();
+        final JobClient jobClient = env.executeAsync();
 //
-//        DebugPrint.deprint(jobExecutionResult.toString(), "job result");
+        final JobExecutionResult jobExecutionResult = jobClient.getJobExecutionResult().get();
 
-        env.execute();
+        DebugPrint.deprint(jobExecutionResult.toString(), "job result");
+
+//        env.execute();
     }
 
     public static class Person {
