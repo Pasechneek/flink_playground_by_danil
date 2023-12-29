@@ -1,19 +1,35 @@
 package org.example;
 
+import org.apache.flink.api.common.ExecutionConfig;
+import org.apache.flink.api.common.JobExecutionResult;
+import org.apache.flink.core.execution.JobClient;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.environment.StreamExecutionEnvironmentFactory;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.api.common.functions.FilterFunction;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Example {
 
     public static void main(String[] args) throws Exception {
-        final StreamExecutionEnvironment env =
-                StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionConfig executionConfig = env.getConfig();
 
-        DataStream<Person> flintstones = env.fromElements(
-                new Person("Fred", 35),
-                new Person("Wilma", 35),
-                new Person("Pebbles", 2));
+
+//        DataStream<Person> flintstones = env.fromElements(
+//                new Person("Fred", 35),
+//                new Person("Wilma", 35),
+//                new Person("Pebbles", 2));
+
+        List<Person> people = new ArrayList<Person>();
+
+        people.add(new Person("Fred", 35));
+        people.add(new Person("Wilma", 35));
+        people.add(new Person("Pebbles", 2));
+
+        DataStream<Person> flintstones = env.fromCollection(people);
 
         DataStream<Person> adults = flintstones.filter(new FilterFunction<Person>() {
             @Override
@@ -22,7 +38,17 @@ public class Example {
             }
         });
 
-        adults.print();
+//        adults.print();
+        DebugPrint.deprint(adults.toString(), "Adults");
+
+
+//        StreamExecutionEnvironmentFactory exec_env_factory = new StreamExecutionEnvironmentFactory();
+
+//        final JobClient jobClient = env.executeAsync();
+////
+//        final JobExecutionResult jobExecutionResult = jobClient.getJobExecutionResult().get();
+//
+//        DebugPrint.deprint(jobExecutionResult.toString(), "job result");
 
         env.execute();
     }
@@ -36,9 +62,18 @@ public class Example {
             this.name = name;
             this.age = age;
         }
+    }
 
-        public String toString() {
-            return this.name.toString() + ": age " + this.age.toString();
+    public static class DebugPrint {
+        final String stars = "\n**************************************************\n";
+        public static void deprint (String variable, String comment) {
+            String stars = "\n**************************************************\n";
+            System.out.println(String.format("%1$s %3$s\n %2$s %1$s", stars, variable, comment));
+        }
+
+        public static void deprint (String variable) {
+            String stars = "\n**************************************************\n";
+            System.out.println(String.format("%1$s %2$s %1$s", stars, variable));
         }
     }
 }
