@@ -4,14 +4,10 @@ import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.ExecutionMode;
 import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.core.execution.JobClient;
-import org.apache.flink.shaded.zookeeper3.io.netty.util.internal.logging.Log4J2LoggerFactory;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.environment.StreamExecutionEnvironmentFactory;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.api.common.functions.FilterFunction;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.example.DebugPrint.*;
 
 public class Example {
 
@@ -21,15 +17,12 @@ public class Example {
         executionConfig.setMaxParallelism(10);
         executionConfig.setExecutionMode(ExecutionMode.PIPELINED);
 
-
-
         DataStream<Person> flintstones = env.fromElements(
                 new Person("Fred", 35),
                 new Person("Wilma", 35),
                 new Person("Pebbles", 2));
 
 //        List<Person> people = new ArrayList<Person>();
-//
 //        people.add(new Person("Fred", 35));
 //        people.add(new Person("Wilma", 35));
 //        people.add(new Person("Pebbles", 2));
@@ -45,15 +38,11 @@ public class Example {
 //        adults.print();
         DebugPrint.deprint(adults.toString(), "Adults");
 
-
-//        StreamExecutionEnvironmentFactory exec_env_factory = new StreamExecutionEnvironmentFactory();
-
         final JobClient jobClient = env.executeAsync();
-//
         final JobExecutionResult jobExecutionResult = jobClient.getJobExecutionResult().get();
 
         DebugPrint.deprint(jobExecutionResult.toString(), "job result");
-
+//        OR
 //        env.execute();
     }
 
@@ -65,19 +54,6 @@ public class Example {
         public Person(String name, Integer age) {
             this.name = name;
             this.age = age;
-        }
-    }
-
-    public static class DebugPrint {
-        final String stars = "\n**************************************************\n";
-        public static void deprint (String variable, String comment) {
-            String stars = "\n**************************************************\n";
-            System.out.println(String.format("%1$s %3$s\n %2$s %1$s", stars, variable, comment));
-        }
-
-        public static void deprint (String variable) {
-            String stars = "\n**************************************************\n";
-            System.out.println(String.format("%1$s %2$s %1$s", stars, variable));
         }
     }
 }
