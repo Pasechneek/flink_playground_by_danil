@@ -1,0 +1,26 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="WindowWordCount-java-11" type="Application" factoryName="Application">
+    <option name="ALTERNATIVE_JRE_PATH" value="/usr/lib/jvm/java-11-openjdk-amd64" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <envs>
+      <env name="JAVA_HOME" value="/usr/lib/jvm/java-11-openjdk-amd64" />
+      <env name="JAVAC" value="/usr/lib/jvm/java-11-openjdk-amd64/bin" />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="org.example.WindowWordCount" />
+    <module name="flink_sandbox_4" />
+    <option name="PROGRAM_PARAMETERS" value="--illegal-access=permit" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="org.example.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+      <pattern>
+        <option name="PATTERN" value="org.example.WindowWordCount" />
+        <option name="ENABLED" value="false" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

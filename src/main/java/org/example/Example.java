@@ -60,9 +60,6 @@ public class Example {
 //        DebugPrint.deprint(String.valueOf(elem_4), "elem_4");
 
 
-
-
-
 //        final JobClient jobClient = env.executeAsync();
 //
 //        final JobExecutionResult jobExecutionResult = jobClient.getJobExecutionResult().get();

@@ -1,5 +1,6 @@
 package org.example;
 
+import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -11,16 +12,18 @@ import org.apache.flink.util.Collector;
 public class WindowWordCount {
 
     public static void main(String[] args) throws Exception {
-
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         //in CLI put this:  nc -lk 9999
         //then run
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironment();
+
+        ExecutionConfig executionConfig = env.getConfig();
+        executionConfig.setParallelism(2);
 
         DataStream<Tuple2<String, Integer>> dataStream = env
                 .socketTextStream("localhost", 9999)
                 .flatMap(new Splitter())
                 .keyBy(value -> value.f0)
-                .window(TumblingProcessingTimeWindows.of(Time.seconds(5)))
+                .window(TumblingProcessingTimeWindows.of(Time.seconds(15)))
                 .sum(1);
 
         dataStream.print();
