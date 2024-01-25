@@ -38,6 +38,7 @@ GRANT SHOW MASTER STATUS ON *.* TO 'user';
 SET GLOBAL binlog_format = 'ROW';
 --and
 SET [SESSION] sql_log_bin = {0|1}
+SET Local log_bin = 1;
 ```
 
 # or

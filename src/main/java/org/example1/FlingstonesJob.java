@@ -1,18 +1,13 @@
-package org.example;
+package org.example1;
 
 import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.ExecutionMode;
-import org.apache.flink.api.common.JobExecutionResult;
-import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.common.state.MapStateDescriptor;
-import org.apache.flink.core.execution.JobClient;
-import org.apache.flink.runtime.dispatcher.Dispatcher;
-import org.apache.flink.streaming.api.datastream.DataStreamSink;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.api.common.functions.FilterFunction;
+import org.debug.print.DebugPrint;
 
-public class Example {
+public class FlingstonesJob {
 
     public static void main(String[] args) throws Exception {
 
@@ -53,30 +48,8 @@ public class Example {
 
         data_stream_adults.print();
 
-//        int elem_1 = data_stream_adults.getId();
-//        DebugPrint.deprint(String.valueOf(elem_1), "elem_1");
-
-//        var elem_4 = data_stream_adults.executeAndCollect();
-//        DebugPrint.deprint(String.valueOf(elem_4), "elem_4");
-
-
-//        final JobClient jobClient = env.executeAsync();
-//
-//        final JobExecutionResult jobExecutionResult = jobClient.getJobExecutionResult().get();
-//
-//        DebugPrint.deprint(jobExecutionResult.toString(), "job result");
         var jobExecutionResult = env.execute();
         DebugPrint.deprint(jobExecutionResult.toString(), "job result");
-
-//        var elem_2 = jobExecutionResult.getAllAccumulatorResults();
-//        DebugPrint.deprint(elem_2.toString(), "getAllAccumulatorResults()");
-
-
-//        int elem_3 = data_stream_adults.getId();
-//        DebugPrint.deprint(String.valueOf(elem_3), "elem_3");
-
-
-
     }
 
     public static class Person {

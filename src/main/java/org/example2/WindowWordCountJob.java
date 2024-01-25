@@ -1,4 +1,4 @@
-package org.example;
+package org.example2;
 
 import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.functions.FlatMapFunction;
@@ -9,7 +9,7 @@ import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTime
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.util.Collector;
 
-public class WindowWordCount {
+public class WindowWordCountJob {
 
     public static void main(String[] args) throws Exception {
         //in CLI put this:  nc -lk 9999

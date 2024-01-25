@@ -6,17 +6,17 @@
       <env name="JAVA_HOME" value="/usr/lib/jvm/java-11-openjdk-amd64" />
       <env name="JAVAC" value="/usr/lib/jvm/java-11-openjdk-amd64/bin" />
     </envs>
-    <option name="MAIN_CLASS_NAME" value="org.example.WindowWordCount" />
+    <option name="MAIN_CLASS_NAME" value="org.example2.WindowWordCountJob" />
     <module name="flink_sandbox_4" />
     <option name="PROGRAM_PARAMETERS" value="--illegal-access=permit" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="org.example.*" />
+        <option name="PATTERN" value="org.debug.print.*" />
         <option name="ENABLED" value="true" />
       </pattern>
       <pattern>
-        <option name="PATTERN" value="org.example.WindowWordCount" />
-        <option name="ENABLED" value="false" />
+        <option name="PATTERN" value="org.example2.WindowWordCountJob" />
+        <option name="ENABLED" value="true" />
       </pattern>
     </extension>
     <method v="2">

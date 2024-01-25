@@ -1,4 +1,4 @@
-package org.example;
+package org.debug.print;
 
 public class DebugPrint {
 
@@ -8,11 +8,11 @@ public class DebugPrint {
         return "\n**************************************************\n";
     }
 
-    public static void deprint(String variable, String comment) {
-        System.out.printf("%1$s%3$s\n%2$s%1$s%n", getStars(), variable, comment);
-    }
-
     public static void deprint (String variable) {
         System.out.printf("%1$s%2$s%1$s%n", getStars(), variable);
+    }
+
+    public static void deprint(String variable, String comment) {
+        System.out.printf("%1$s%3$s\n%2$s%1$s%n", getStars(), variable, comment);
     }
 }
