@@ -7,8 +7,7 @@ JAVA_HOME, KAFKA_HOME must be specified;
 
 ```
 CREATE DATABASE db_example;
-CREATE USER 'myuser'@'localhost' IDENTIFIED BY 'password';
-CREATE USER 'user' IDENTIFIED BY 'password';
+CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';
 ```
 
 Check
