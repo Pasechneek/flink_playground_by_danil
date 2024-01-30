@@ -38,10 +38,10 @@ public class TopicDbJob {
                 .build();
 
         var jdbcConnectionOptions = new JdbcConnectionOptions.JdbcConnectionOptionsBuilder()
-                .withUrl("jdbc:mariadb://localhost:3306/example")
+                .withUrl("jdbc:mariadb://localhost:3306/db_example")
                 .withDriverName("org.mariadb.jdbc.Driver")
-                .withUsername("hello")
-                .withPassword("hello")
+                .withUsername("user")
+                .withPassword("password")
                 .build();
 
         DataStream<String> dataStream = env.fromSource(kafkaSource, WatermarkStrategy.noWatermarks(), "Kafka Source")

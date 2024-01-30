@@ -22,10 +22,10 @@ public class DbTopicJob {
         MySqlSource<String> mySQLSource = MySqlSource.<String>builder()
                 .hostname("localhost")
                 .port(3306)
-                .databaseList("example")
-                .tableList("example.Application")
-                .username("hello")
-                .password("hello")
+                .databaseList("db_example")
+                .tableList("db_example.Application")
+                .username("user")
+                .password("password")
                 .serverId(String.valueOf(new ServerIdRange(5401, 5404)))
                 .deserializer(new JsonDebeziumDeserializationSchema())
                 .build();
@@ -42,7 +42,7 @@ public class DbTopicJob {
                 .setParallelism(4)
                 .name("data stream from, MySQL");
 
-//        dataStream.print();
+        dataStream.print();
 
         String broker = "localhost:9092";
 
@@ -53,7 +53,7 @@ public class DbTopicJob {
                         .setValueSerializationSchema(new SimpleStringSchema())
                         .build()
                         )
-                .setTransactionalIdPrefix("my-record-producer")
+//                .setTransactionalIdPrefix("my-record-producer")
 //                .setDeliveryGuarantee(DeliveryGuarantee.EXACTLY_ONCE)
                 .setDeliveryGuarantee(DeliveryGuarantee.AT_LEAST_ONCE)
                 .build();

@@ -3,4 +3,4 @@
 kafka-server-stop.sh
 zkServer.sh stop
 zkServer.sh start
-kafka-server-start.sh /opt/Kafka/kafka_2.12-3.6.0/config/server.properties
+kafka-server-start.sh $KAFKA_HOME/config/server.properties

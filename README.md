@@ -1,71 +1,38 @@
 
+Zookeeper, Apache Kafka, Mariadb should be installed 
 
+JAVA_HOME, KAFKA_HOME must be specified;
 
---Mariadb config
-log_bin must be switched on 
-
-SET GLOBAL log_bin = 1;  (or ON)
-
-
-GRANT CDC
-
-
-GRANT SELECT, SHOW DATABASES, REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'user' IDENTIFIED BY 'password';
-GRANT update, insert, delete, select , SHOW DATABASES, REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'user';
-
-GRANT SELECT, SHOW DATABASES, REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'hello' IDENTIFIED BY 'hello';
-GRANT update, insert, delete, select , SHOW DATABASES, REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'hello';
-
-GRANT SELECT, SHOW MASTER STATUS ON *.* TO 'hello' IDENTIFIED BY 'hello';
-
-GRANT REPLICATION CLIENT
-ON *.*
-TO 'USERNAME'@'HOSTNAME';
-
-GRANT REPLICATION CLIENT
-ON *.*
-TO 'hello'@'localhost';
-
-
-FLUSH PRIVILEGES;
-
-GRANT update, insert, delete, select , SHOW DATABASES, REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'user';
-GRANT SHOW MASTER STATUS ON *.* TO 'user';
-
-
+-- Mariadb 
 
 ```
-SET GLOBAL binlog_format = 'ROW';
---and
-SET [SESSION] sql_log_bin = {0|1}
-SET Local log_bin = 1;
+CREATE DATABASE db_example;
+CREATE USER 'myuser'@'localhost' IDENTIFIED BY 'password';
+CREATE USER 'user' IDENTIFIED BY 'password';
 ```
 
-# or
-
+Check
 ```
-SET SESSION binlog_format = 'ROW';
---and
-SET [SESSION] sql_log_bin = {0|1}
+select host, user from mysql.user where user='user' ;
 ```
 
-# The MariaDB configuration file
-#
-# The MariaDB/MySQL tools read configuration files in the following order:
-# 0. "/etc/mysql/my.cnf" symlinks to this file, reason why all the rest is read.
-# 1. "/etc/mysql/mariadb.cnf" (this file) to set global defaults,
-# 2. "/etc/mysql/conf.d/*.cnf" to set global options.
-# 3. "/etc/mysql/mariadb.conf.d/*.cnf" to set MariaDB-only options.
-# 4. "~/.my.cnf" to set user-specific options.
+log_bin must be switched on. To do this run in mariadb cli [root]:
 
-
-
-Please, check the variables in mariadb. It should be like:
+Put into **/etc/mysql/my.cnf** the following:
 
 ```
-MariaDB [(none)]> show global variables like "%log_bin%";
+[mysqld]
+log_bin = ON
+binlog_format = ROW
 ```
 
+Check in mariadb CLI
+```
+show global variables like "%log_bin%";
+```
+
+The variables must be like
+```
 +---------------------------------+-------------------------+
 | Variable_name                   | Value                   |
 +---------------------------------+-------------------------+
@@ -77,3 +44,46 @@ MariaDB [(none)]> show global variables like "%log_bin%";
 | log_bin_trust_function_creators | OFF                     |
 | sql_log_bin                     | ON                      |
 +---------------------------------+-------------------------+
+```
+
+
+Grant cdc previlegue run followind in mariadb cli
+
+```
+GRANT SELECT, SHOW DATABASES, REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'user' IDENTIFIED BY 'password';
+
+GRANT update, insert, delete, select , SHOW DATABASES, REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'user';
+
+GRANT SELECT, SHOW DATABASES, REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'user' IDENTIFIED BY 'password';
+
+GRANT update, insert, delete, select , SHOW DATABASES, REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'user';
+
+GRANT update, insert, delete, select , SHOW DATABASES, REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'user';
+
+GRANT CREATE ON db_example.* TO 'user'@'localhost' identified by 'password';
+GRANT SELECT ON db_example.* TO 'user'@'localhost' identified by 'password';
+GRANT ALTER ON db_example.* TO 'user'@'localhost' identified by 'password';
+GRANT INSERT ON db_example.* TO 'user'@'localhost' identified by 'password';
+GRANT REPLICATION SLAVE ON *.* TO 'user'@'localhost';
+GRANT REPLICATION CLIENT ON *.* TO 'user'@'localhost';
+
+FLUSH PRIVILEGES;
+```
+GRANT SHOW MASTER STATUS ON *.* TO 'user'; --problem
+GRANT SHOW MASTER STATUS ON *.* TO 'user' IDENTIFIED BY 'password'; --problem
+
+
+
+# Additional info: MariaDB configuration file
+```
+The MariaDB/MySQL tools read configuration files in the following order:
+0. "/etc/mysql/my.cnf" symlinks to this file, reason why all the rest is read.
+1. "/etc/mysql/mariadb.cnf" (this file) to set global defaults,
+2. "/etc/mysql/conf.d/*.cnf" to set global options.
+3. "/etc/mysql/mariadb.conf.d/*.cnf" to set MariaDB-only options.
+4. "~/.my.cnf" to set user-specific options.
+```
+
+
+Please, check the variables in mariadb. It should be like:
+
