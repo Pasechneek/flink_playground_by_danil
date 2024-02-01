@@ -1,7 +1,9 @@
 
-Zookeeper, Apache Kafka, Mariadb should be installed 
+Java, Maven, Zookeeper, Kafka, Mariadb should be installed 
 
-JAVA_HOME, KAFKA_HOME must be specified;
+Provide env global variables like in .env.example file
+
+Before run the project please install dependencies using Maven;
 
 -- Mariadb 
 

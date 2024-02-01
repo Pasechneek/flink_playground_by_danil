@@ -38,10 +38,10 @@ public class TopicDbJob {
                 .build();
 
         var jdbcConnectionOptions = new JdbcConnectionOptions.JdbcConnectionOptionsBuilder()
-                .withUrl("jdbc:mariadb://localhost:3306/db_example")
+                .withUrl("jdbc:mariadb://" + System.getenv("EXAMPLE_HOST") + ":3306/" + System.getenv("EXAMPLE_DB"))
                 .withDriverName("org.mariadb.jdbc.Driver")
-                .withUsername("user")
-                .withPassword("password")
+                .withUsername(System.getenv("EXAMPLE_USER"))
+                .withPassword(System.getenv("EXAMPLE_PASSWORD"))
                 .build();
 
         DataStream<String> dataStream = env.fromSource(kafkaSource, WatermarkStrategy.noWatermarks(), "Kafka Source")
@@ -96,12 +96,6 @@ public class TopicDbJob {
                     product = "555555555555";
                 }
 
-//                DebugPrint.deprint(String.valueOf(id), "id");
-//                DebugPrint.deprint(String.valueOf(ucdb_id), "ucdb_id");
-//                DebugPrint.deprint(String.valueOf(ucdb_id), "ucdb_id");
-//                DebugPrint.deprint(String.valueOf(ucdb_id), "ucdb_id");
-
-
                 Application apl = new Application(id, ucdb_id, requested_amount, product);
 
                 return apl;
@@ -113,20 +107,29 @@ public class TopicDbJob {
                 .build();
 
 
+        String query = "INSERT into Application_2 (id, ucdb_id, requested_amount, product) VALUES (?,?,?,?) " +
+                "ON DUPLICATE KEY UPDATE " +
+                "id = ?, ucdb_id = ?, requested_amount = ?, product = ?;";
+
+
         mappedDataStream.addSink(
-                JdbcSink.sink(
-                "insert into Application_2 (id, ucdb_id, requested_amount, product) values (?,?,?,?)",
+                JdbcSink
+                        .sink(
+                query,
                 (preparedStatement, someRecord) -> {
                     preparedStatement.setLong(1, someRecord.getId());
                     preparedStatement.setLong(2, someRecord.getUcdbId());
                     preparedStatement.setFloat(3, someRecord.getRequestedAmount());
                     preparedStatement.setString(4, someRecord.getProduct());
+                    preparedStatement.setLong(5, someRecord.getId());
+                    preparedStatement.setLong(6, someRecord.getUcdbId());
+                    preparedStatement.setFloat(7, someRecord.getRequestedAmount());
+                    preparedStatement.setString(8, someRecord.getProduct());
                 },
                 jdbcExecutionOptions,
                 jdbcConnectionOptions
         )
         );
-
 
         env.execute("From topic to db");
     }

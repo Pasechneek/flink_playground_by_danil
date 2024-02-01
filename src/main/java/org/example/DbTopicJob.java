@@ -20,12 +20,12 @@ public class DbTopicJob {
     public static void main(String[] args) throws Exception {
 
         MySqlSource<String> mySQLSource = MySqlSource.<String>builder()
-                .hostname("localhost")
+                .hostname(System.getenv("EXAMPLE_HOST"))
                 .port(3306)
-                .databaseList("db_example")
-                .tableList("db_example.Application")
-                .username("user")
-                .password("password")
+                .databaseList(System.getenv("EXAMPLE_DB"))
+                .tableList("example.Application")
+                .username(System.getenv("EXAMPLE_USER"))
+                .password(System.getenv("EXAMPLE_PASSWORD"))
                 .serverId(String.valueOf(new ServerIdRange(5401, 5404)))
                 .deserializer(new JsonDebeziumDeserializationSchema())
                 .build();
