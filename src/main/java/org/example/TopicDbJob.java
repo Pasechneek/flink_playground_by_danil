@@ -12,8 +12,11 @@ import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.connector.jdbc.JdbcSink;
 import org.debug.print.DebugPrint;
+import org.example.map.MyApplicationMap;
 import org.json.JSONObject;
 import org.model.Application;
+
+//import static jdk.nashorn.internal.objects.NativeJava.type;
 
 public class TopicDbJob {
 
@@ -48,15 +51,17 @@ public class TopicDbJob {
                 .setParallelism(1)
                 .name("data stream from Topic");
 
+//        MyApplicationMap myMap = new MyApplicationMap();
+
         DataStream<Application> mappedDataStream = dataStream.map(new MapFunction<>() {
             @Override
-            public Application map(String someString) throws Exception {
+            public Application map(String stringThatContainJson) throws Exception {
 
                 JSONObject jsonObject = new JSONObject(
-                        someString
+                        stringThatContainJson
                 );
 
-                DebugPrint.deprint(someString, "origin");
+//                DebugPrint.deprint(stringThatContainJson, "origin");
 
                 Long id;
                 Long ucdb_id;
@@ -85,6 +90,8 @@ public class TopicDbJob {
                             .getFloat("requested_amount");
                 } catch (Exception e) {
                     DebugPrint.deprint(e.getMessage());
+                    var variable = jsonObject.getClass();
+                    DebugPrint.deprint(variable.toString(), "JsonObject variable");
                     requested_amount = 555555555.00F;
                 }
 

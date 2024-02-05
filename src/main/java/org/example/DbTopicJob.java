@@ -8,6 +8,7 @@ import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.connector.base.DeliveryGuarantee;
 import org.apache.flink.connector.kafka.sink.KafkaRecordSerializationSchema;
 import org.apache.flink.connector.kafka.sink.KafkaSink;
+import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
@@ -42,7 +43,11 @@ public class DbTopicJob {
                 .setParallelism(4)
                 .name("data stream from, MySQL");
 
-        dataStream.print();
+        dataStream
+                .print();
+
+//        KeyedStream<String, Integer> keyedStream = dataStream
+//                .keyBy(
 
         String broker = "localhost:9092";
 
@@ -60,6 +65,8 @@ public class DbTopicJob {
 
         dataStream
                 .sinkTo(sinkApplications)
+                .name("Kafka Sink")
+
                 .setParallelism(1);
 
         env.execute("Print MySQL Snapshot + Binlog");
