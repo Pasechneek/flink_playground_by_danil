@@ -1,2 +1,2 @@
-1:
-	java ./src/main
+up:
+	docker-compose up -d

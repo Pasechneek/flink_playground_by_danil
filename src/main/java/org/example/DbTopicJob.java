@@ -2,17 +2,18 @@ package org.example;
 
 import com.ververica.cdc.connectors.mysql.source.MySqlSource;
 import com.ververica.cdc.connectors.mysql.source.config.ServerIdRange;
+import com.ververica.cdc.debezium.JsonDebeziumDeserializationSchema;
 import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.ExecutionMode;
+import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
+import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.connector.base.DeliveryGuarantee;
 import org.apache.flink.connector.kafka.sink.KafkaRecordSerializationSchema;
 import org.apache.flink.connector.kafka.sink.KafkaSink;
+import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.api.common.eventtime.WatermarkStrategy;
-import com.ververica.cdc.debezium.JsonDebeziumDeserializationSchema;
 
 import javax.management.timer.Timer;
 
@@ -40,14 +41,11 @@ public class DbTopicJob {
         executionConfig.setExecutionMode(ExecutionMode.PIPELINED);
 
         DataStream<String> dataStream = env.fromSource(mySQLSource, WatermarkStrategy.noWatermarks(), "MySQL Source")
-                .setParallelism(4)
+                .setParallelism(1) // mandatory
                 .name("data stream from, MySQL");
 
         dataStream
                 .print();
-
-//        KeyedStream<String, Integer> keyedStream = dataStream
-//                .keyBy(
 
         String broker = "localhost:9092";
 
@@ -66,7 +64,6 @@ public class DbTopicJob {
         dataStream
                 .sinkTo(sinkApplications)
                 .name("Kafka Sink")
-
                 .setParallelism(1);
 
         env.execute("Print MySQL Snapshot + Binlog");

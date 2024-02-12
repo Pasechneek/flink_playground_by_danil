@@ -1,0 +1,24 @@
+version: "3.9"
+
+#volumes:
+#  flink_job_volume:
+
+services:
+  flink_job:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    env_file:
+      - ./.env
+    expose:
+      - 3306
+      - 9092
+
+#  ports:
+#      - "3306:3306"
+#      - "9092:9092"
+##      - "9005:9005"
+##      - "9006:9006"
+
+#networks:
+#  flink:

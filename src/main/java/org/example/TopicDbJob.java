@@ -11,9 +11,7 @@ import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsIni
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.connector.jdbc.JdbcSink;
-import org.debug.print.DebugPrint;
-import org.example.map.MyApplicationMap;
-import org.json.JSONObject;
+import org.example.map.StringToObjectMap;
 import org.model.Application;
 
 //import static jdk.nashorn.internal.objects.NativeJava.type;
@@ -33,81 +31,19 @@ public class TopicDbJob {
                 .setValueOnlyDeserializer(new SimpleStringSchema())
                 .build();
 
-
-        var jdbcExecutionOptions = JdbcExecutionOptions.builder()
-                .withBatchIntervalMs(200)
-                .withBatchSize(1000)
-                .withMaxRetries(4)
-                .build();
-
-        var jdbcConnectionOptions = new JdbcConnectionOptions.JdbcConnectionOptionsBuilder()
-                .withUrl("jdbc:mariadb://" + System.getenv("EXAMPLE_HOST") + ":3306/" + System.getenv("EXAMPLE_DB"))
-                .withDriverName("org.mariadb.jdbc.Driver")
-                .withUsername(System.getenv("EXAMPLE_USER"))
-                .withPassword(System.getenv("EXAMPLE_PASSWORD"))
-                .build();
-
-        DataStream<String> dataStream = env.fromSource(kafkaSource, WatermarkStrategy.noWatermarks(), "Kafka Source")
+        DataStream<String> dataStream = env
+                .fromSource(kafkaSource, WatermarkStrategy.noWatermarks(), "Kafka Source")
                 .setParallelism(1)
                 .name("data stream from Topic");
 
-//        MyApplicationMap myMap = new MyApplicationMap();
-
-        DataStream<Application> mappedDataStream = dataStream.map(new MapFunction<>() {
-            @Override
-            public Application map(String stringThatContainJson) throws Exception {
-
-                JSONObject jsonObject = new JSONObject(
-                        stringThatContainJson
-                );
-
-//                DebugPrint.deprint(stringThatContainJson, "origin");
-
-                Long id;
-                Long ucdb_id;
-                Float requested_amount;
-                String product;
-
-                try {
-                    id = jsonObject.getJSONObject("after")
-                            .getLong("id");
-
-                } catch (Exception e) {
-                    DebugPrint.deprint(e.getMessage());
-                    id = 555555555555L;
-                }
-
-                try {
-                    ucdb_id = jsonObject.getJSONObject("after")
-                            .getLong("ucdb_id");
-                } catch (Exception e) {
-                    DebugPrint.deprint(e.getMessage());
-                    ucdb_id = 555555555555L;
-                }
-
-                try {
-                    requested_amount = jsonObject.getJSONObject("after")
-                            .getFloat("requested_amount");
-                } catch (Exception e) {
-                    DebugPrint.deprint(e.getMessage());
-                    var variable = jsonObject.getClass();
-                    DebugPrint.deprint(variable.toString(), "JsonObject variable");
-                    requested_amount = 555555555.00F;
-                }
-
-                try {
-                    product = jsonObject.getJSONObject("after")
-                            .getString("product");
-                } catch (Exception e) {
-                    DebugPrint.deprint(e.getMessage());
-                    product = "555555555555";
-                }
-
-                Application apl = new Application(id, ucdb_id, requested_amount, product);
-
-                return apl;
-            }
-        });
+        DataStream<Application> mappedDataStream = dataStream
+                .map(new MapFunction<>() {
+                    @Override
+                    public Application map(String stringThatContainJson) throws Exception {
+                        StringToObjectMap myMap = new StringToObjectMap();
+                        return myMap.map(stringThatContainJson);
+                    }
+                });
 
         JdbcExactlyOnceOptions.builder()
                 .withTransactionPerConnection(true)
@@ -119,23 +55,36 @@ public class TopicDbJob {
                 "id = ?, ucdb_id = ?, requested_amount = ?, product = ?;";
 
 
+        var jdbcExecutionOptions = JdbcExecutionOptions.builder()
+                .withBatchIntervalMs(200)
+                .withBatchSize(1000)
+                .withMaxRetries(5)
+                .build();
+
+        var jdbcConnectionOptions = new JdbcConnectionOptions.JdbcConnectionOptionsBuilder()
+                .withUrl("jdbc:mariadb://" + System.getenv("EXAMPLE_HOST") + ":3306/" + System.getenv("EXAMPLE_DB"))
+                .withDriverName("org.mariadb.jdbc.Driver")
+                .withUsername(System.getenv("EXAMPLE_USER"))
+                .withPassword(System.getenv("EXAMPLE_PASSWORD"))
+                .build();
+
         mappedDataStream.addSink(
                 JdbcSink
                         .sink(
-                query,
-                (preparedStatement, someRecord) -> {
-                    preparedStatement.setLong(1, someRecord.getId());
-                    preparedStatement.setLong(2, someRecord.getUcdbId());
-                    preparedStatement.setFloat(3, someRecord.getRequestedAmount());
-                    preparedStatement.setString(4, someRecord.getProduct());
-                    preparedStatement.setLong(5, someRecord.getId());
-                    preparedStatement.setLong(6, someRecord.getUcdbId());
-                    preparedStatement.setFloat(7, someRecord.getRequestedAmount());
-                    preparedStatement.setString(8, someRecord.getProduct());
-                },
-                jdbcExecutionOptions,
-                jdbcConnectionOptions
-        )
+                                query,
+                                (preparedStatement, variable) -> {
+                                    preparedStatement.setLong(1, variable.getId());
+                                    preparedStatement.setLong(2, variable.getUcdbId());
+                                    preparedStatement.setFloat(3, variable.getRequestedAmount());
+                                    preparedStatement.setString(4, variable.getProduct());
+                                    preparedStatement.setLong(5, variable.getId());
+                                    preparedStatement.setLong(6, variable.getUcdbId());
+                                    preparedStatement.setFloat(7, variable.getRequestedAmount());
+                                    preparedStatement.setString(8, variable.getProduct());
+                                },
+                                jdbcExecutionOptions,
+                                jdbcConnectionOptions
+                        )
         );
 
         env.execute("From topic to db");
