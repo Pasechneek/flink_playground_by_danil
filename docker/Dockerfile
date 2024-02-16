@@ -21,4 +21,4 @@ ENV PATH /opt/maven/bin:$PATH
 
 WORKDIR /flink-job
 
-RUN mvn compile
+RUN mvn clean && mvn compile

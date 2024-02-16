@@ -1,24 +1,60 @@
 version: "3.9"
 
-#volumes:
-#  flink_job_volume:
+volumes:
+  flink_job_volume:
+  mariadb-data:
+    driver: local
+
+#networks:
+#  flink_job:
 
 services:
   flink_job:
+    volumes:
+      - flink_job_volume:/home/danil/IdeaProjects/flink_sandbox/data:rw
+    image: dmerkurev/flink_sandbox:v1
     build:
       context: .
       dockerfile: ./docker/Dockerfile
     env_file:
       - ./.env
-    expose:
-      - 3306
-      - 9092
 
-#  ports:
-#      - "3306:3306"
-#      - "9092:9092"
-##      - "9005:9005"
-##      - "9006:9006"
-
-#networks:
-#  flink:
+#    network_mode: host
+#    expose:
+#      - 3306
+#      - 9092
+#    ports:
+#      - "3307:3306"
+#      - "9093:9092"
+#  mariadb:
+#    image: mariadb
+#    restart: always
+#    environment:
+#      - MARIADB_ROOT_PASSWORD="root"
+#      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=1
+#    volumes:
+#      - ./config/mariadb:/etc/mysql
+#      - mariadb-data:/var/lib/mysql
+#    env_file:
+#      - ./.env
+#    expose:
+#      - 3307
+#  adminer:
+#    image: adminer
+#    restart: always
+#    ports:
+#      - 8081:8080
+#  kafka:
+#    image: 'bitnami/kafka:latest'
+##    networks:
+##      - app-tier
+#    environment:
+#      - KAFKA_CFG_NODE_ID=0
+#      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+#      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+#      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+#      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
+#      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+#    expose:
+#      - 9092
+#      - 9093

@@ -37,5 +37,5 @@ build/
 
 ### Mac OS ###
 .DS_Store
-.env
+#.env
 /src/main/java/org/backup/

@@ -9,12 +9,21 @@ Before run the project please install dependencies using Maven;
 
 ```
 CREATE DATABASE db_example;
+
+--or 
+
+CREATE DATABASE example;
+
 CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';
+
+--or 
+
+CREATE USER 'hello'@'localhost' IDENTIFIED BY 'hello';
 ```
 
 Check
 ```
-select host, user from mysql.user where user='user' ;
+select host, user, password from mysql.user;
 ```
 
 log_bin must be switched on. To do this run in mariadb cli [root]:
@@ -85,6 +94,236 @@ The MariaDB/MySQL tools read configuration files in the following order:
 4. "~/.my.cnf" to set user-specific options.
 ```
 
+Then
+```
 
-Please, check the variables in mariadb. It should be like:
 
+USE [DatabaseName]
+--or
+USE example;
+
+
+--then 
+
+
+CREATE TABLE `Application` (
+`id` bigint(20) NOT NULL AUTO_INCREMENT,
+`ucdb_id` bigint(20) DEFAULT NULL,
+`requested_amount` float DEFAULT NULL,
+`product` varchar(100) DEFAULT NULL,
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=244 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+--then
+
+INSERT INTO example.Application (ucdb_id,requested_amount,product) VALUES
+(123,10000.0,'Loan'),
+(123,10000.0,'Loan'),
+(123,10000.0,'Loan'),
+(123,10000.0,'Loan'),
+(123,10000.0,'Loan'),
+(123,10000.0,'Loan'),
+(123,10000.0,'Loan'),
+(123,10000.0,'Loan'),
+(123,10000.0,'Loan'),
+(123,10000.0,'Loan');
+INSERT INTO example.Application (ucdb_id,requested_amount,product) VALUES
+(123,10000.0,'Loan'),
+(123,10000.0,'Loan'),
+(123,10000.0,'Loan'),
+(123,10000.0,'Loan'),
+(123,10000.0,'Loan'),
+(123,10000.0,'Loan'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale');
+INSERT INTO example.Application (ucdb_id,requested_amount,product) VALUES
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale');
+INSERT INTO example.Application (ucdb_id,requested_amount,product) VALUES
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale');
+INSERT INTO example.Application (ucdb_id,requested_amount,product) VALUES
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale');
+INSERT INTO example.Application (ucdb_id,requested_amount,product) VALUES
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale');
+INSERT INTO example.Application (ucdb_id,requested_amount,product) VALUES
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale');
+INSERT INTO example.Application (ucdb_id,requested_amount,product) VALUES
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale');
+INSERT INTO example.Application (ucdb_id,requested_amount,product) VALUES
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(124,15000.0,'Upsale'),
+(125,20000.0,'CashLoan'),
+(125,20000.0,'CashLoan'),
+(125,20000.0,'CashLoan'),
+(125,20000.0,'CashLoan'),
+(125,20000.0,'CashLoan'),
+(125,20000.0,'CashLoan'),
+(125,20000.0,'CashLoan');
+INSERT INTO example.Application (ucdb_id,requested_amount,product) VALUES
+(125,20000.0,'CashLoan'),
+(125,20000.0,'CashLoan'),
+(125,20000.0,'CashLoan'),
+(125,20000.0,'CashLoan'),
+(125,20000.0,'CashLoan'),
+(125,20000.0,'CashLoan'),
+(125,20000.0,'CashLoan'),
+(125,20000.0,'CashLoan'),
+(125,20000.0,'CashLoan'),
+(125,20000.0,'CashLoan');
+INSERT INTO example.Application (ucdb_id,requested_amount,product) VALUES
+(125,20000.0,'CashLoan'),
+(125,20000.0,'CashLoan'),
+(125,20000.0,'CashLoan'),
+(125,20000.0,'CashLoan'),
+(125,20000.0,'CashLoan'),
+(125,20000.0,'CashLoan'),
+(125,20000.0,'CashLoan'),
+(125,20000.0,'CashLoan'),
+(125,20000.0,'CashLoan'),
+(125,20000.0,'CashLoan');
+INSERT INTO example.Application (ucdb_id,requested_amount,product) VALUES
+(125,20000.0,'CashLoan'),
+(125,20000.0,'CashLoan'),
+(126,21000.0,'PayDay'),
+(127,25000.0,'Loan'),
+(127,25000.0,'Loan'),
+(127,25000.0,'Loan'),
+(127,25000.0,'Loan'),
+(127,25000.0,'Loan'),
+(127,25000.0,'Loan'),
+(127,25000.0,'Loan');
+INSERT INTO example.Application (ucdb_id,requested_amount,product) VALUES
+(127,25000.0,'Loan'),
+(127,25000.0,'Loan'),
+(127,25000.0,'Loan'),
+(127,25000.0,'Loan'),
+(127,25000.0,'Loan'),
+(127,25000.0,'Loan'),
+(127,25000.0,'Loan'),
+(127,25000.0,'Loan'),
+(127,25000.0,'Loan'),
+(127,25000.0,'Loan');
+INSERT INTO example.Application (ucdb_id,requested_amount,product) VALUES
+(127,25000.0,'Loan'),
+(127,25000.0,'Loan'),
+(127,25000.0,'Loan'),
+(127,25000.0,'Loan'),
+(127,25000.0,'Loan'),
+(127,25000.0,'Loan'),
+(127,25000.0,'Loan'),
+(127,25000.0,'Loan'),
+(127,25000.0,'Loan'),
+(127,25000.0,'Loan');
+INSERT INTO example.Application (ucdb_id,requested_amount,product) VALUES
+(127,25000.0,'Loan'),
+(127,25000.0,'Loan'),
+(127,30000.0,'Upsale'),
+(127,30000.0,'Upsale'),
+(127,30000.0,'Upsale'),
+(127,30000.0,'Upsale'),
+(127,30000.0,'Upsale'),
+(127,30000.0,'Upsale'),
+(127,30000.0,'Upsale'),
+(127,30000.0,'Upsale');
+INSERT INTO example.Application (ucdb_id,requested_amount,product) VALUES
+(127,30000.0,'Upsale'),
+(127,30000.0,'Upsale'),
+(127,30000.0,'Upsale'),
+(127,30000.0,'Upsale'),
+(127,30000.0,'Upsale'),
+(127,30000.0,'Upsale'),
+(127,30000.0,'Upsale'),
+(127,30000.0,'Upsale'),
+(127,30000.0,'Upsale'),
+(127,30000.0,'Upsale');
+INSERT INTO example.Application (ucdb_id,requested_amount,product) VALUES
+(127,30000.0,'Upsale'),
+(127,30000.0,'Upsale'),
+(127,30000.0,'Upsale'),
+(127,30000.0,'Upsale'),
+(127,30000.0,'Upsale'),
+(127,30000.0,'Upsale'),
+(127,30000.0,'Upsale'),
+(127,30000.0,'Upsale'),
+(127,30000.0,'Upsale'),
+(127,30000.0,'Upsale');
+INSERT INTO example.Application (ucdb_id,requested_amount,product) VALUES
+(127,30000.0,'Upsale'),
+(128,35000.0,'Loan'),
+(128,35000.0,'Loan'),
+(128,35000.0,'Loan'),
+(129,40000.0,'CashLoan'),
+(129,40000.0,'CashLoan'),
+(129,40000.0,'CashLoan'),
+(129,40000.0,'CashLoan'),
+(129,40000.0,'CashLoan'),
+(129,40000.0,'CashLoan');
+INSERT INTO example.Application (ucdb_id,requested_amount,product) VALUES
+(129,40000.0,'CashLoan'),
+(129,40000.0,'CashLoan'),
+(129,40000.0,'CashLoan'),
+(129,40000.0,'CashLoan'),
+(129,40000.0,'CashLoan'),
+(129,40000.0,'CashLoan'),
+(129,40000.0,'CashLoan'),
+(129,40000.0,'CashLoan'),
+(129,40000.0,'CashLoan'),
+(129,40000.0,'CashLoan');
+```

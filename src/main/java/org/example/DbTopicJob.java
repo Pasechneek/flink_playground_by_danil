@@ -14,16 +14,22 @@ import org.apache.flink.connector.kafka.sink.KafkaSink;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.debug.print.DebugPrint;
 
 import javax.management.timer.Timer;
-
+import java.sql.Connection;
+import java.sql.DriverManager;
 
 public class DbTopicJob {
     public static void main(String[] args) throws Exception {
 
+//        DebugPrint.deprint(
+//                DriverManager.getConnection("jdbc:mysql://localhost/example?user=hello&password=hello").toString()
+//                );
+
         MySqlSource<String> mySQLSource = MySqlSource.<String>builder()
                 .hostname(System.getenv("EXAMPLE_HOST"))
-                .port(3306)
+                .port(3307)
                 .databaseList(System.getenv("EXAMPLE_DB"))
                 .tableList("example.Application")
                 .username(System.getenv("EXAMPLE_USER"))
@@ -32,9 +38,15 @@ public class DbTopicJob {
                 .deserializer(new JsonDebeziumDeserializationSchema())
                 .build();
 
+//        DebugPrint.deprint(System.getenv("EXAMPLE_HOST"), "EXAMPLE_HOST");
+//        DebugPrint.deprint(System.getenv("EXAMPLE_DB"), "EXAMPLE_DB");
+//        DebugPrint.deprint(System.getenv("EXAMPLE_USER"), "EXAMPLE_USER");
+//        DebugPrint.deprint(System.getenv("EXAMPLE_PASSWORD"), "EXAMPLE_PASSWORD");
+
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
         env.enableCheckpointing(Timer.ONE_MINUTE);
+        env.setParallelism(1);
 
         final ExecutionConfig executionConfig = env.getConfig();
         executionConfig.setMaxParallelism(10);
@@ -47,7 +59,7 @@ public class DbTopicJob {
         dataStream
                 .print();
 
-        String broker = "localhost:9092";
+        String broker = System.getenv("KAFKA_HOST") + ":9092";
 
         KafkaSink<String> sinkApplications = KafkaSink.<String>builder()
                 .setBootstrapServers(broker)
@@ -55,7 +67,7 @@ public class DbTopicJob {
                         .setTopic("caught-applications")
                         .setValueSerializationSchema(new SimpleStringSchema())
                         .build()
-                        )
+                )
 //                .setTransactionalIdPrefix("my-record-producer")
 //                .setDeliveryGuarantee(DeliveryGuarantee.EXACTLY_ONCE)
                 .setDeliveryGuarantee(DeliveryGuarantee.AT_LEAST_ONCE)
@@ -65,6 +77,8 @@ public class DbTopicJob {
                 .sinkTo(sinkApplications)
                 .name("Kafka Sink")
                 .setParallelism(1);
+
+        DebugPrint.deprint(dataStream.print().toString());
 
         env.execute("Print MySQL Snapshot + Binlog");
     }
