@@ -14,8 +14,6 @@ import org.apache.flink.connector.jdbc.JdbcSink;
 import org.example.map.StringToObjectMap;
 import org.model.Application;
 
-//import static jdk.nashorn.internal.objects.NativeJava.type;
-
 public class TopicDbJob {
 
     public static void main(String[] args) throws Exception {

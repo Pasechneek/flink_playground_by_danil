@@ -23,10 +23,6 @@ import java.sql.DriverManager;
 public class DbTopicJob {
     public static void main(String[] args) throws Exception {
 
-//        DebugPrint.deprint(
-//                DriverManager.getConnection("jdbc:mysql://localhost/example?user=hello&password=hello").toString()
-//                );
-
         MySqlSource<String> mySQLSource = MySqlSource.<String>builder()
                 .hostname(System.getenv("EXAMPLE_HOST"))
                 .port(3307)
