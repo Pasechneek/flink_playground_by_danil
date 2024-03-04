@@ -293,37 +293,4 @@ INSERT INTO example.Application (ucdb_id,requested_amount,product) VALUES
 (127,30000.0,'Upsale'),
 (127,30000.0,'Upsale'),
 (127,30000.0,'Upsale');
-INSERT INTO example.Application (ucdb_id,requested_amount,product) VALUES
-(127,30000.0,'Upsale'),
-(127,30000.0,'Upsale'),
-(127,30000.0,'Upsale'),
-(127,30000.0,'Upsale'),
-(127,30000.0,'Upsale'),
-(127,30000.0,'Upsale'),
-(127,30000.0,'Upsale'),
-(127,30000.0,'Upsale'),
-(127,30000.0,'Upsale'),
-(127,30000.0,'Upsale');
-INSERT INTO example.Application (ucdb_id,requested_amount,product) VALUES
-(127,30000.0,'Upsale'),
-(128,35000.0,'Loan'),
-(128,35000.0,'Loan'),
-(128,35000.0,'Loan'),
-(129,40000.0,'CashLoan'),
-(129,40000.0,'CashLoan'),
-(129,40000.0,'CashLoan'),
-(129,40000.0,'CashLoan'),
-(129,40000.0,'CashLoan'),
-(129,40000.0,'CashLoan');
-INSERT INTO example.Application (ucdb_id,requested_amount,product) VALUES
-(129,40000.0,'CashLoan'),
-(129,40000.0,'CashLoan'),
-(129,40000.0,'CashLoan'),
-(129,40000.0,'CashLoan'),
-(129,40000.0,'CashLoan'),
-(129,40000.0,'CashLoan'),
-(129,40000.0,'CashLoan'),
-(129,40000.0,'CashLoan'),
-(129,40000.0,'CashLoan'),
-(129,40000.0,'CashLoan');
 ```
