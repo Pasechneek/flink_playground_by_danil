@@ -293,4 +293,5 @@ INSERT INTO example.Application (ucdb_id,requested_amount,product) VALUES
 (127,30000.0,'Upsale'),
 (127,30000.0,'Upsale'),
 (127,30000.0,'Upsale');
+
 ```
