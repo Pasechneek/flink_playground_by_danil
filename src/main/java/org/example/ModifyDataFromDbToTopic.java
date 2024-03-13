@@ -18,6 +18,8 @@ import org.apache.flink.connector.kafka.sink.KafkaSink;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
+import org.apache.flink.streaming.api.windowing.time.Time;
 import org.debug.print.DebugPrint;
 import org.example.map.StringToPOJOMap;
 import org.model.Application;
@@ -103,8 +105,18 @@ public class ModifyDataFromDbToTopic {
 
         mappedToTuple
                 .print("mappedToTuple");
+        var keyedStream = mappedToTuple
+                .keyBy(value -> ((Tuple4<Long, Long, Float, String>)value).f1)
+                .windowAll(TumblingEventTimeWindows.of(Time.seconds(10)))
+                ;
 
-        KeyedStream<Tuple4<Long, Long, Float, String>, Long> keyed = mappedToTuple.keyBy(value -> value.f1);
+        int pos = 0;
+        var res = keyedStream.sum(pos)
+                .print("sum");
+
+        DebugPrint.deprint(res.toString(), "RES");
+
+//        KeyedStream<Tuple4<Long, Long, Float, String>, Long> keyed = mappedToTuple.keyBy(value -> ((Tuple4<Long, Long, Float, String>)value).f1);
 
 //        KeyedStream<Tuple4<Long, Long, Float, String>, Long> keyed = mappedToTuple
 //                .keyBy(new KeySelector<Tuple4<Long, Long, Float, String>, Long>() {
