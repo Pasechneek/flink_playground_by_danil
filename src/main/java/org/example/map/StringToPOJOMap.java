@@ -7,11 +7,10 @@ import org.model.Application;
 
 import java.util.Objects;
 
-public class StringToObjectMap {
+public class StringToPOJOMap {
 
     public static Long getLongFromJsonByKey(String stringThatContainJson, String key) {
         long result;
-//        var after =
 
         try {
             result = getMyJsonObjectFromString(stringThatContainJson).getJSONObject("after").getLong(key);
@@ -27,7 +26,6 @@ public class StringToObjectMap {
                 DebugPrint.deprint("NOT NULL!!!", "NOT NULL!!!");
             }
             DebugPrint.deprint(je.getMessage());
-//            result = 5555555555555L;
         } catch (Exception e) {
             DebugPrint.deprint(e.getMessage());
             result = 5555555555555L;

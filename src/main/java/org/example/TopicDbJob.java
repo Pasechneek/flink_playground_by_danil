@@ -11,7 +11,7 @@ import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsIni
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.connector.jdbc.JdbcSink;
-import org.example.map.StringToObjectMap;
+import org.example.map.StringToPOJOMap;
 import org.model.Application;
 
 public class TopicDbJob {
@@ -38,7 +38,7 @@ public class TopicDbJob {
                 .map(new MapFunction<>() {
                     @Override
                     public Application map(String stringThatContainJson) throws Exception {
-                        StringToObjectMap myMap = new StringToObjectMap();
+                        StringToPOJOMap myMap = new StringToPOJOMap();
                         return myMap.map(stringThatContainJson);
                     }
                 });

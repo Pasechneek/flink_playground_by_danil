@@ -11,7 +11,7 @@ import org.apache.flink.connector.base.DeliveryGuarantee;
 import org.apache.flink.connector.kafka.sink.KafkaRecordSerializationSchema;
 import org.apache.flink.connector.kafka.sink.KafkaSink;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.example.map.StringToObjectMap;
+import org.example.map.StringToPOJOMap;
 import org.model.Application;
 
 public class TopicTopicJob {
@@ -35,7 +35,7 @@ public class TopicTopicJob {
         DataStream<Application> mappedDataStream = dataStream.map(new MapFunction<>() {
             @Override
             public Application map(String someString) throws Exception {
-                StringToObjectMap myMap = new StringToObjectMap();
+                StringToPOJOMap myMap = new StringToPOJOMap();
                 return myMap.map(someString);
             }
         });
