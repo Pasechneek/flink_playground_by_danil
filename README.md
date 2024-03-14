@@ -70,7 +70,10 @@ GRANT update, insert, delete, select , SHOW DATABASES, REPLICATION SLAVE, REPLIC
 
 GRANT update, insert, delete, select , SHOW DATABASES, REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'user';
 
+GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, CREATE TEMPORARY TABLES, LOCK TABLES, EXECUTE, CREATE VIEW, SHOW VIEW, CREATE ROUTINE, ALTER ROUTINE ON *.* TO 'user' IDENTIFIED BY 'password';
+
 GRANT CREATE ON db_example.* TO 'user'@'localhost' identified by 'password';
+GRANT UPDATE ON db_example.* TO 'user'@'localhost' identified by 'password'; --correct
 GRANT SELECT ON db_example.* TO 'user'@'localhost' identified by 'password';
 GRANT ALTER ON db_example.* TO 'user'@'localhost' identified by 'password';
 GRANT INSERT ON db_example.* TO 'user'@'localhost' identified by 'password';

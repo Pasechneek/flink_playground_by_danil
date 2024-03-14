@@ -4,7 +4,6 @@ import org.debug.print.DebugPrint;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.model.Application;
-import org.model.Application2;
 
 import java.util.Objects;
 
@@ -83,15 +82,6 @@ public class StringToPOJOMap {
     public Application map(String stringThatContainJson) throws Exception {
         return new Application(
                 getLongFromJsonByKey(stringThatContainJson, "id"),
-                getLongFromJsonByKey(stringThatContainJson, "ucdb_id"),
-                getFloatFromJsonByKey(stringThatContainJson, "requested_amount"),
-                getStringFromJsonByKey(stringThatContainJson, "product")
-        );
-    }
-
-    public Application2 map2(String stringThatContainJson) throws Exception {
-        return new Application2(
-                getIntFromJsonByKey(stringThatContainJson, "id"),
                 getLongFromJsonByKey(stringThatContainJson, "ucdb_id"),
                 getFloatFromJsonByKey(stringThatContainJson, "requested_amount"),
                 getStringFromJsonByKey(stringThatContainJson, "product")

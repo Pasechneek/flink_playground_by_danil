@@ -60,7 +60,7 @@ public class TopicDbJob {
                 .build();
 
         var jdbcConnectionOptions = new JdbcConnectionOptions.JdbcConnectionOptionsBuilder()
-                .withUrl("jdbc:mariadb://" + System.getenv("EXAMPLE_HOST") + ":3307/" + System.getenv("EXAMPLE_DB"))
+                .withUrl("jdbc:mariadb://" + System.getenv("EXAMPLE_HOST") + ":3306/" + System.getenv("EXAMPLE_DB"))
                 .withDriverName("org.mariadb.jdbc.Driver")
                 .withUsername(System.getenv("EXAMPLE_USER"))
                 .withPassword(System.getenv("EXAMPLE_PASSWORD"))

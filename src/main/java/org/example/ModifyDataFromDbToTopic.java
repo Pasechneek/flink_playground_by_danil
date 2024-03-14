@@ -8,23 +8,17 @@ import org.apache.flink.api.common.ExecutionMode;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
-import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.common.typeinfo.Types;
-import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.tuple.Tuple4;
 import org.apache.flink.connector.base.DeliveryGuarantee;
 import org.apache.flink.connector.kafka.sink.KafkaRecordSerializationSchema;
 import org.apache.flink.connector.kafka.sink.KafkaSink;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.debug.print.DebugPrint;
 import org.example.map.StringToPOJOMap;
 import org.model.Application;
-import org.model.Application2;
-
 import javax.management.timer.Timer;
 
 public class ModifyDataFromDbToTopic {
@@ -67,10 +61,10 @@ public class ModifyDataFromDbToTopic {
                 .print("dataStream");
 
 
-        DataStream<Application2> mappedToApplication = dataStream
-                .map((MapFunction<String, Application2>) stringThatContainJson -> {
+        DataStream<Application> mappedToApplication = dataStream
+                .map((MapFunction<String, Application>) stringThatContainJson -> {
                     StringToPOJOMap myMap = new StringToPOJOMap();
-                    return myMap.map2(stringThatContainJson);
+                    return myMap.map(stringThatContainJson);
                 });
 
         mappedToApplication.print("mappedToApplication");
@@ -81,7 +75,7 @@ public class ModifyDataFromDbToTopic {
 
 
 //        KeyedStream<Object, Object> mappedToTuple;
-        var mappedToTuple = mappedToApplication.map((MapFunction<Application2, Object>) appl -> Tuple4.of(
+        var mappedToTuple = mappedToApplication.map((MapFunction<Application, Object>) appl -> Tuple4.of(
                 appl.getId(),
                 appl.getUcdbId(),
                 appl.getRequestedAmount(),

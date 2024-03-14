@@ -7,25 +7,20 @@ import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.ExecutionMode;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
-import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.connector.base.DeliveryGuarantee;
 import org.apache.flink.connector.kafka.sink.KafkaRecordSerializationSchema;
 import org.apache.flink.connector.kafka.sink.KafkaSink;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.debug.print.DebugPrint;
-
 import javax.management.timer.Timer;
-import java.sql.Connection;
-import java.sql.DriverManager;
 
 public class DbTopicJob {
     public static void main(String[] args) throws Exception {
 
         MySqlSource<String> mySQLSource = MySqlSource.<String>builder()
                 .hostname(System.getenv("EXAMPLE_HOST"))
-                .port(Integer.parseInt(System.getenv("DB_PORT")))
+                .port(3306)
                 .databaseList(System.getenv("EXAMPLE_DB"))
                 .tableList(System.getenv("EXAMPLE_DB") + ".Application")
                 .username(System.getenv("EXAMPLE_USER"))
