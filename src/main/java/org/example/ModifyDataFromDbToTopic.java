@@ -23,6 +23,7 @@ import org.apache.flink.streaming.api.windowing.time.Time;
 import org.debug.print.DebugPrint;
 import org.example.map.StringToPOJOMap;
 import org.model.Application;
+import org.model.Application2;
 
 import javax.management.timer.Timer;
 
@@ -66,13 +67,10 @@ public class ModifyDataFromDbToTopic {
                 .print("dataStream");
 
 
-        DataStream<Application> mappedToApplication = dataStream
-                .map(new MapFunction<>() {
-                    @Override
-                    public Application map(String stringThatContainJson) throws Exception {
-                        StringToPOJOMap myMap = new StringToPOJOMap();
-                        return myMap.map(stringThatContainJson);
-                    }
+        DataStream<Application2> mappedToApplication = dataStream
+                .map((MapFunction<String, Application2>) stringThatContainJson -> {
+                    StringToPOJOMap myMap = new StringToPOJOMap();
+                    return myMap.map2(stringThatContainJson);
                 });
 
         mappedToApplication.print("mappedToApplication");
@@ -83,22 +81,17 @@ public class ModifyDataFromDbToTopic {
 
 
 //        KeyedStream<Object, Object> mappedToTuple;
-        var mappedToTuple = mappedToApplication.map(new MapFunction<>() {
-            @Override
-            public Tuple4<Long, Long, Float, String> map(Application appl) {
-                return Tuple4.of(
-                        appl.getId(),
-                        appl.getUcdbId(),
-                        appl.getRequestedAmount(),
-                        appl.getProduct()
-                );
-            }
-        });
+        var mappedToTuple = mappedToApplication.map((MapFunction<Application2, Object>) appl -> Tuple4.of(
+                appl.getId(),
+                appl.getUcdbId(),
+                appl.getRequestedAmount(),
+                appl.getProduct()
+        ));
 
 
-
-        TypeInformation<Tuple4<Long, Long, Float, String>> tupleType = Types
-                .TUPLE(Types.LONG, Types.LONG, Types.FLOAT, Types.STRING);
+//
+//        TypeInformation<Tuple4<Long, Long, Float, String>> tupleType = Types
+//                .TUPLE(Types.INT, Types.LONG, Types.FLOAT, Types.STRING);
 
 //        mappedToTuple.keyBy(mappedToTuple,  tupleType);
 
@@ -106,15 +99,18 @@ public class ModifyDataFromDbToTopic {
         mappedToTuple
                 .print("mappedToTuple");
         var keyedStream = mappedToTuple
-                .keyBy(value -> ((Tuple4<Long, Long, Float, String>)value).f1)
+                .keyBy(value -> ((Tuple4<Integer, Long, Float, String>)value).f1)
                 .windowAll(TumblingEventTimeWindows.of(Time.seconds(10)))
                 ;
+//        keyedStream.print("keyed");
 
-        int pos = 0;
-        var res = keyedStream.sum(pos)
-                .print("sum");
-
-        DebugPrint.deprint(res.toString(), "RES");
+//        int pos = 0;
+//        var res = keyedStream
+////                .sum(2)
+////                .print("sum")
+//                ;
+//
+//        DebugPrint.deprint(res.toString(), "RES");
 
 //        KeyedStream<Tuple4<Long, Long, Float, String>, Long> keyed = mappedToTuple.keyBy(value -> ((Tuple4<Long, Long, Float, String>)value).f1);
 

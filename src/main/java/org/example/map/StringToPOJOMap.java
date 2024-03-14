@@ -4,6 +4,7 @@ import org.debug.print.DebugPrint;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.model.Application;
+import org.model.Application2;
 
 import java.util.Objects;
 
@@ -33,6 +34,30 @@ public class StringToPOJOMap {
         return result;
     }
 
+    public static Integer getIntFromJsonByKey(String stringThatContainJson, String key) {
+        int result;
+
+        try {
+            result = getMyJsonObjectFromString(stringThatContainJson).getJSONObject("after").getInt(key);
+        } catch (JSONException je) {
+            result = getMyJsonObjectFromString(stringThatContainJson).getJSONObject("before").getInt(key);
+            DebugPrint.deprint(String.valueOf(result));
+
+            if (Objects.isNull(getMyJsonObjectFromString(stringThatContainJson))) {
+                DebugPrint.deprint("NULL!!!", "NULL!!!");
+            } else {
+                DebugPrint.deprint(getMyJsonObjectFromString(stringThatContainJson).toString(), "+++++++what I Search ");
+                DebugPrint.deprint(getMyJsonObjectFromString(stringThatContainJson).getClass().toString(), "+++++++what I Search - Type");
+                DebugPrint.deprint("NOT NULL!!!", "NOT NULL!!!");
+            }
+            DebugPrint.deprint(je.getMessage());
+        } catch (Exception e) {
+            DebugPrint.deprint(e.getMessage());
+            result = 555555555;
+        }
+        return result;
+    }
+
     public static Float getFloatFromJsonByKey(String stringThatContainJson, String key) {
         float result;
         try {
@@ -58,6 +83,15 @@ public class StringToPOJOMap {
     public Application map(String stringThatContainJson) throws Exception {
         return new Application(
                 getLongFromJsonByKey(stringThatContainJson, "id"),
+                getLongFromJsonByKey(stringThatContainJson, "ucdb_id"),
+                getFloatFromJsonByKey(stringThatContainJson, "requested_amount"),
+                getStringFromJsonByKey(stringThatContainJson, "product")
+        );
+    }
+
+    public Application2 map2(String stringThatContainJson) throws Exception {
+        return new Application2(
+                getIntFromJsonByKey(stringThatContainJson, "id"),
                 getLongFromJsonByKey(stringThatContainJson, "ucdb_id"),
                 getFloatFromJsonByKey(stringThatContainJson, "requested_amount"),
                 getStringFromJsonByKey(stringThatContainJson, "product")
